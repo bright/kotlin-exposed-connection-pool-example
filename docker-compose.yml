@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: foo
+    ports:
+      - "55432:5432"
