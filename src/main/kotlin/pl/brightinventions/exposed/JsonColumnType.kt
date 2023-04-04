@@ -6,7 +6,10 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.statements.api.PreparedStatementApi
 import org.postgresql.util.PGobject
 
-class JsonbColumnType(
+fun <T: Any> Table.json(name: String, serialize: (Any) -> String, deserialize: (String) -> Any): Column<T> =
+    registerColumn(name, JsonColumnType(serialize, deserialize))
+
+class JsonColumnType(
     private val serialize: (Any) -> String,
     private val deserialize: (String) -> Any
 ) : ColumnType() {
@@ -32,14 +35,5 @@ class JsonbColumnType(
         return deserialize(checkNotNull(value.value))
     }
 
-    override fun valueToString(value: Any?): String = when (value) {
-        is Iterable<*> -> nonNullValueToString(value)
-        else -> super.valueToString(value)
-    }
-
-    @Suppress("UNCHECKED_CAST")
     override fun notNullValueToDB(value: Any): String = serialize(value)
 }
-
-fun <T: Any> Table.jsonValue(name: String, serialize: (Any) -> String, deserialize: (String) -> Any): Column<T> =
-    registerColumn(name, JsonbColumnType(serialize, deserialize))

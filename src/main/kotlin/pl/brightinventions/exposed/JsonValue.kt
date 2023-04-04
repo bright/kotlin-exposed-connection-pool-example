@@ -6,10 +6,13 @@ import org.jetbrains.exposed.sql.vendors.PostgreSQLDialect
 import org.jetbrains.exposed.sql.vendors.currentDialect
 import kotlin.reflect.KClass
 
-inline fun <reified T : Any> Column<*>.jsonValue(vararg jsonPath: String): JsonValue<T> = this.jsonValue(T::class, *jsonPath)
+inline fun <reified T : Any> Column<*>.jsonValue(vararg jsonPath: String): Function<T> = this.jsonValue(T::class, *jsonPath)
 
-@Suppress("CyclomaticComplexMethod")
-fun <T : Any> Column<*>.jsonValue(clazz: KClass<T>, vararg jsonPath: String): JsonValue<T> {
+fun <T : Any> Column<*>.jsonValue(clazz: KClass<T>, vararg jsonPath: String): Function<T> {
+    if (this.columnType !is JsonColumnType) {
+        throw IllegalArgumentException("Cannot perform jsonValue call on the column which is not related to JsonbColumnType")
+    }
+
     val columnType = when (clazz) {
         Boolean::class -> BooleanColumnType()
         Int::class -> IntegerColumnType()
@@ -29,15 +32,10 @@ class PostgreSQLJsonValue<T>(
     private val expr: Expression<*>,
     override val columnType: ColumnType,
     private val jsonPath: List<String>
-) : JsonValue<T>(columnType) {
+) : Function<T>(columnType) {
     override fun toQueryBuilder(queryBuilder: QueryBuilder) = queryBuilder {
-        currentDialect is PostgreSQLDialect
         append("(")
         append(expr)
         append("${jsonPath.joinToString { it }})::${columnType.sqlType()}")
     }
 }
-
-abstract class JsonValue<T>(
-    columnType: ColumnType
-) : Function<T>(columnType)

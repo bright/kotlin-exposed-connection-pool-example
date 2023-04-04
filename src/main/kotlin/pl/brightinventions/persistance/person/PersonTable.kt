@@ -5,13 +5,13 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.id.IntIdTable
-import pl.brightinventions.exposed.jsonValue
+import pl.brightinventions.exposed.json
 
 object PersonTable : IntIdTable("person") {
     val name = text("name")
     val surname = text("surname")
     val age = integer("age")
-    val details = jsonValue<PersonDetails>(
+    val details = json<PersonDetails>(
         "details",
         { Json.encodeToString(it as PersonDetails) },
         { Json.decodeFromString(it) as PersonDetails }
