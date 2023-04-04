@@ -11,6 +11,7 @@ class PersonEntity(id: EntityID<Int>): IntEntity(id) {
     var surname by PersonTable.surname
     var age by PersonTable.age
     val addresses by AddressEntity referrersOn AddressTable.personId
+    var details by PersonTable.details
 }
 
 class AddressEntity(id: EntityID<Int>): IntEntity(id) {

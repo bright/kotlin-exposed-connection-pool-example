@@ -7,7 +7,8 @@ data class FoundPersonDto(
     val id: Int,
     val name: String,
     val surname: String,
-    val age: Int
+    val age: Int,
+    val details: FoundPersonDetailsDto
 )
 
 @Serializable
@@ -16,7 +17,13 @@ data class FoundPersonWithAddressDto(
     val name: String,
     val surname: String,
     val age: Int,
+    val details: FoundPersonDetailsDto,
     val addresses: List<FoundPersonAddressDto>
+)
+
+@Serializable
+data class FoundPersonDetailsDto(
+    val nickname: String
 )
 
 @Serializable
