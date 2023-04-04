@@ -1,7 +1,11 @@
-Exposed in your project - part 2 - DAO
+Exposed in your project - part 3 - JSON support
 ===
 
-In [the tutorial](https://brightinventions.pl/blog/exposed-in-your-project-part-2-dao), we are going to learn how to modify our [previous code](https://brightinventions.pl/blog/exposed-in-your-project-part-1) and use JetBrains/Exposed in DAO manner
+In [the tutorial](https://brightinventions.pl/blog/exposed-in-your-project-json-support), we are going to learn how to
+implement JSON support in our JetBrains/Exposed app - we will create new
+ColumnType and how to modify the database query.
+
+As an extra point, I will show you, how to establish connection pooling and why it's important
 
 License
 ---
